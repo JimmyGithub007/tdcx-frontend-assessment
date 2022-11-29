@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Button, Card, Input, ModalContainer } from "../../styles"
+import { Card, ModalContainer } from "../../styles"
 
 const Modal = (props) => {
     const modalRef = useRef(null);
@@ -15,7 +15,7 @@ const Modal = (props) => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [modalRef])
+    }, [props, modalRef])
 
     return (
         <ModalContainer show={props.show || false}>

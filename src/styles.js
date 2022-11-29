@@ -1,9 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 
-const colors = [
-    { 'gray-1' : '#F4F4F6' }
-];
-
 const modalPopupAnimation = keyframes`
     0% { margin-top: -200px; }
     100% { margin-top: 0px; }
@@ -68,11 +64,11 @@ export const Navbar = styled.div`
     }
     height: 72px;
     justify-content: space-between;
-    a, span {
+    span {
         color: #6D8187;
         font-size: 16px;
     }
-    a:hover {
+    .link:hover {
         cursor: pointer;
         opacity: 0.6;
     }
@@ -108,6 +104,9 @@ export const List = styled.ul`
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        &.strike {
+            text-decoration: line-through;
+        }
     }
 `
 

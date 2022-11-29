@@ -15,7 +15,7 @@ const Header = ({ user, navigate }) => {
             <Avatar src={user?.image} alt="profile" />
             <span>{user?.token?.name}</span>
         </div>
-        <a onClick={logout}>Logout</a>
+        <span className="link" onClick={logout}>Logout</span>
     </Navbar>)
 }
 

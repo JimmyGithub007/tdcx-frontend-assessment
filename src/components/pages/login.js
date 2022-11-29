@@ -35,7 +35,7 @@ const Login = () => {
         if(localStorage.getItem("userData")) {
             navigate('/')
         }
-    }, [])
+    }, [navigate])
 
     return (<form onSubmit={handleSubmit(onSubmit)}>
         <div style={{ 
