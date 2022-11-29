@@ -59,8 +59,8 @@ const Dashboard = () => {
         const taskListing = task.listing.filter(t => t._id !== id);
         axiosInstance.delete(`${apiURL}/tasks/${id}`).then(() => {
             setTask({
-                totalTasks: task.totalTasks - 1,
-                tasksCompleted: task.tasksCompleted -1,
+                totalTasks: taskListing.length,
+                tasksCompleted: taskListing.filter(t => t.completed === true).length,
                 latestTasks: _.orderBy(taskListing, ["createdAt"], ["desc"]).filter((t, k) => t._id !== id && k < 3),
                 listing: taskListing
             });
