@@ -139,9 +139,15 @@ export const CheckList = styled.div`
     }
     .list {
         display: flex;
+        align-items: flex-start;
+        gap: 12px;
         width: 100%;
-        input, span {
+        input[type=checkbox], span {
             cursor: pointer;
+        }
+        input[type=checkbox] {
+            margin-top: 8px;
+            scale: 1.4612;
         }
     }
     .action{ 
