@@ -5,6 +5,15 @@ const modalPopupAnimation = keyframes`
     100% { margin-top: 0px; }
 `
 
+const skeletonKeyframes = keyframes`
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+`;
+
 export const Avatar = styled.img`
     border-radius: 100%;
     height: 48px;
@@ -87,6 +96,12 @@ export const ModalContainer = styled.div`
     top: 0;
     transition: opacity 500ms;
     width: 100%;
+    @media (max-width: 576px) {
+        align-items: flex-start;
+        ${Card} {
+            margin-top: 84px;
+        }
+    }
 `
 
 export const Title = styled.span`
@@ -122,9 +137,19 @@ export const CheckList = styled.div`
             text-decoration: line-through;
         }
     }
-    .action > img:hover {
-        cursor: pointer;
-        opacity: 0.8;
+    .list {
+        display: flex;
+        width: 100%;
+        input, span {
+            cursor: pointer;
+        }
+    }
+    .action{ 
+        width: 60px;
+        img:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
     }
 `
 
@@ -241,15 +266,6 @@ export const TaskBottom = styled.div`
         }
     }
 `
-
-const skeletonKeyframes = keyframes`
-    0% {
-        background-position: -200px 0;
-    }
-    100% {
-        background-position: calc(200px + 100%) 0;
-    }
-`;
 
 export const Skeleton = styled.div`
     height: ${props => props.height};
