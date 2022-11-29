@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Header from "../layouts/header";
 import Modal from '../widgets/modal';
 import axios from 'axios';
+import PieChart from '../widgets/pie';
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -165,7 +166,7 @@ const Dashboard = () => {
                         </List>
                     </Card>
                     <Card>
-
+                        <PieChart incompleted={task.totalTasks - task.tasksCompleted} completed={task.tasksCompleted} />
                     </Card>
                 </TaskTop>     
                 <TaskBottom>
