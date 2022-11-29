@@ -34,8 +34,9 @@ const Dashboard = () => {
     });
 
     const openModal = (value) => {
+        document.body.style.overflowY = 'hidden';
         if(window.innerWidth < 576) {
-            document.body.style.position = 'fixed';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         setShow(true);
         reset({
@@ -46,7 +47,7 @@ const Dashboard = () => {
     }
 
     const closeModal = () => {
-        document.body.style.position = 'unset';
+        document.body.style.overflowY = 'auto';
         setShow(false);
     }
 
