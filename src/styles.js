@@ -160,6 +160,9 @@ export const WithTask = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (max-width: 650px) {
+        padding: 12px 0;
+    }
 `
 
 export const TaskTop = styled.div`
@@ -169,6 +172,7 @@ export const TaskTop = styled.div`
     justify-content: center;
     ${Card} {
         padding: 24px 24px 28px 24px;
+        height: 110px;
         width: 256px;
     }
     @media (max-width: 960px) {
@@ -179,6 +183,20 @@ export const TaskTop = styled.div`
             border-radius: 0;
             width: 100%;
         }
+    }
+`
+
+export const SearchInput = styled.div`
+    align-items: center;
+    display: flex;
+    position: relative;
+    ${Input} {
+        padding-left: 40px;
+        text-indent: 0px;
+    }
+    img {
+        padding-left: 15px;
+        position: absolute;
     }
 `
 
@@ -217,7 +235,7 @@ export const TaskBottom = styled.div`
                 flex-direction: column;
                 margin-top: 8px;
                 width: 100%;
-                ${Input}, ${Button} {
+                ${SearchInput}, ${Input}, ${Button} {
                     width: inherit;
                 }
             }

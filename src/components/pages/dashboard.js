@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
-import { Button, Card, CheckList, Input, List, NoTask, Skeleton, TaskBottom, TaskTop, Title, WithTask } from "../../styles";
+import { Button, Card, CheckList, Input, List, NoTask, SearchInput, Skeleton, TaskBottom, TaskTop, Title, WithTask } from "../../styles";
 import { Controller, useForm } from 'react-hook-form';
 
 import Header from "../layouts/header";
@@ -172,7 +172,10 @@ const Dashboard = () => {
                     <div className="title">
                         <Title>Tasks</Title>
                         <div className="action">
-                            <Input placeholder="Search by task name" onChange={e => setSearch(e.target.value) } />
+                            <SearchInput>
+                                <Input placeholder="Search by task name" onChange={e => setSearch(e.target.value) } />
+                                <img src="./icons/search-solid.svg" />
+                            </SearchInput>
                             <Button onClick={() => openModal(null) }>+ New Task</Button>
                         </div>
                     </div>
