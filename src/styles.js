@@ -1,9 +1,13 @@
 import styled, { keyframes } from 'styled-components';
 
-const modalPopupAnimation = keyframes`
-    0% { margin-top: -200px; }
-    100% { margin-top: 0px; }
-`
+const skeletonKeyframes = keyframes`
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+`;
 
 export const Avatar = styled.img`
     border-radius: 100%;
@@ -18,10 +22,6 @@ export const Card = styled.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
-    &.modal {
-        animation-name: ${modalPopupAnimation};
-        animation-duration: 1500ms;
-    }
 ` 
 
 export const Button = styled.button`
@@ -58,12 +58,17 @@ export const Navbar = styled.div`
     background-color: #FFFFFF;
     box-shadow: 0px 3px 6px #00000029;
     display: flex;
-    padding: 0 120px;
-    @media (max-width: 768px) {
+    height: 72px;
+    justify-content: center;
+    .content {
+        width: 960px; 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    @media (max-width: 960px) {
         padding: 0 24px;
     }
-    height: 72px;
-    justify-content: space-between;
     span {
         color: #6D8187;
         font-size: 16px;
@@ -87,6 +92,12 @@ export const ModalContainer = styled.div`
     top: 0;
     transition: opacity 500ms;
     width: 100%;
+    @media (max-width: 576px) {
+        align-items: flex-start;
+        ${Card} {
+            margin-top: 84px;
+        }
+    }
 `
 
 export const Title = styled.span`
@@ -122,14 +133,38 @@ export const CheckList = styled.div`
             text-decoration: line-through;
         }
     }
-    .action > img:hover {
-        cursor: pointer;
-        opacity: 0.8;
+    .list {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+        input[type=checkbox], span {
+            cursor: pointer;
+        }
+        input[type=checkbox] {
+            margin-top: 8px;
+            scale: 1.4612;
+        }
+    }
+    .action{ 
+        width: 60px;
+        img:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
     }
 `
 
 export const Body = styled.div`
     background-color: #F4F4F6;
+`
+
+export const FlexCenter = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
 `
 
 export const NoTask = styled.div`
@@ -216,20 +251,26 @@ export const TaskBottom = styled.div`
             display: flex;
             gap: 12px;
         }
+        @media (max-width: 960px) {
+            margin-left: 24px;
+            margin-right: 24px;
+        }
     }
     @media (max-width: 960px) {
         width: 100%;
+        ${Card} {
+            margin: 0 24px;
+        }
     }
     @media (max-width: 650px) {
         ${Card} {
             border-radius: 0;
             width: 100%;
+            margin: 0;
         }
         .title {
-            margin-top: 29px;
-            margin-bottom: 16px;
+            margin: 29px 16px 15px 15px;
             flex-direction: column;
-            padding: 0 15px;
             .action {
                 flex-direction: column;
                 margin-top: 8px;
@@ -241,15 +282,6 @@ export const TaskBottom = styled.div`
         }
     }
 `
-
-const skeletonKeyframes = keyframes`
-    0% {
-        background-position: -200px 0;
-    }
-    100% {
-        background-position: calc(200px + 100%) 0;
-    }
-`;
 
 export const Skeleton = styled.div`
     height: ${props => props.height};

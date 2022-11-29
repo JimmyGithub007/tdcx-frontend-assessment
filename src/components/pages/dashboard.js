@@ -33,6 +33,24 @@ const Dashboard = () => {
         }
     });
 
+    const openModal = (value) => {
+        document.body.style.overflowY = 'hidden';
+        if(window.innerWidth < 576) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        setShow(true);
+        reset({
+            id: value ? value._id : 0,
+            name: value ? value.name : "",
+            completed: value ? value.completed : false
+        });    
+    }
+
+    const closeModal = () => {
+        document.body.style.overflowY = 'auto';
+        setShow(false);
+    }
+
     const remove = id => {
         const axiosInstance = axios.create({
             headers: { Authorization: `Bearer ${user.token.token}` }
@@ -41,8 +59,8 @@ const Dashboard = () => {
         const taskListing = task.listing.filter(t => t._id !== id);
         axiosInstance.delete(`${apiURL}/tasks/${id}`).then(() => {
             setTask({
-                totalTasks: task.totalTasks - 1,
-                tasksCompleted: task.tasksCompleted -1,
+                totalTasks: taskListing.length,
+                tasksCompleted: taskListing.filter(t => t.completed === true).length,
                 latestTasks: _.orderBy(taskListing, ["createdAt"], ["desc"]).filter((t, k) => t._id !== id && k < 3),
                 listing: taskListing
             });
@@ -87,19 +105,10 @@ const Dashboard = () => {
                     listing: taskListing
                 });
             }
-            setShow(false);
+            closeModal();
         } catch(error) {
             console.log(error);
         }
-    }
-
-    const openModal = (value) => {
-        setShow(true);
-        reset({
-            id: value ? value._id : 0,
-            name: value ? value.name : "",
-            completed: value ? value.completed : false
-        });    
     }
 
     useEffect(() => {
@@ -206,9 +215,9 @@ const Dashboard = () => {
                                     <CheckList key={key} style={{ 
                                         borderBottom: key === task.listing.length - 1 ? "unset" : "2px solid #E8E8E8"
                                     }}>
-                                        <div>
+                                        <div className="list">
                                             <input type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed }) } />
-                                            <Title className={`${value.completed && "strike"}`}>{value.name}</Title>
+                                            <Title className={`${value.completed && "strike"}`} onClick={() => store({ id: value._id, name: value.name, completed: !value.completed }) }>{value.name}</Title>
                                         </div>
                                         <div className="action">
                                             <img onClick={() => openModal(value) } src="./icons/pen-solid.svg" style={{ marginRight: "16px" }} alt="pen" />
@@ -222,7 +231,7 @@ const Dashboard = () => {
             </WithTask>
 
         }
-        <Modal show={show} onClose={() => setShow(false)}>
+        <Modal show={show} onClose={closeModal}>
             <Title>{getValues("id") === 0 ? "+ New" : <><img src="./icons/pen-solid.svg" alt="pen" /> Edit</> } Task</Title>
             <form id="taskForm" onSubmit={handleSubmit(store)}>
                 <Controller

@@ -7,15 +7,17 @@ const Header = ({ user, navigate }) => {
     }
 
     return (<Navbar>
-        <div style={{ 
-            display: "flex",
-            alignItems: "center",
-            gap: "16px"
-         }}>
-            <Avatar src={user?.image} alt="profile" />
-            <span>{user?.token?.name}</span>
+        <div className="content">
+            <div style={{ 
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+            }}>
+                <Avatar src={user?.image} alt="profile" />
+                <span>{user?.token?.name}</span>
+            </div>
+            <span className="link" onClick={logout}>Logout</span>
         </div>
-        <span className="link" onClick={logout}>Logout</span>
     </Navbar>)
 }
 
