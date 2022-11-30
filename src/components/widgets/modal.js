@@ -21,7 +21,7 @@ const Modal = (props) => {
         <ModalContainer show={props.show || false}>
             <Card
                 ref={modalRef}
-                className="modal"
+                gap="12px"
                 style={{
                     padding: "24px 24px 29px 24px"
                 }}

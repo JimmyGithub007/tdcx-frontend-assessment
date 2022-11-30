@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Card, CheckList, ErrorMessage, FlexCenter, Input, List, NoTask, SearchInput, Skeleton, TaskBottom, TaskTop, Title, WithTask } from "../../styles";
 import { Controller, useForm } from 'react-hook-form';
+import Highlighter from 'react-highlight-words';
 import _ from 'lodash';
 
 import Header from "../layouts/header";
@@ -156,11 +157,12 @@ const Dashboard = () => {
         {   task.totalTasks === 0 ?
             <NoTask>
                 <Card
+                    gap="20px"
                     style={{
                         padding: "37px 64px"
                     }}
                 >
-                    <span>You have no task.</span>
+                    <Title>You have no task.</Title>
                     <Button onClick={() => openModal(null) }>+ New Task</Button>
                 </Card>
             </NoTask> :
@@ -168,12 +170,10 @@ const Dashboard = () => {
                 <TaskTop>
                     <Card>
                         <Title>Tasks Completed</Title>
-                        <span>
-                            <span 
-                                style={{ fontSize: "64px", color: "#5285EC" }}>
-                            {task.tasksCompleted}</span>
-                            <span style={{ color: "#8F9EA2", fontSize: "20px" }}> / {task.totalTasks}</span>
-                        </span>
+                        <div className="count">
+                            <span>{task.tasksCompleted}</span>
+                            <span> / {task.totalTasks}</span>
+                        </div>
                     </Card>
                     <Card>
                         <Title>Latest Created Tasks</Title>
@@ -206,38 +206,44 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <Card>
-                            {   taskLoading ? <div style={{ padding: "24px" }}>
-                                    <Skeleton height="24px" width="100%" />
-                                    <Skeleton height="24px" width="90%" />
-                                    <Skeleton height="24px" width="80%" />
-                                </div> : (
-                                    handleFilter.length > 0 ?
-                                    _.orderBy(handleFilter, ["createdAt"], ["desc"]).map((value, key) => (
-                                        <CheckList key={key} style={{ 
-                                            borderBottom: key === task.listing.length - 1 ? "unset" : "2px solid #E8E8E8"
-                                        }}>
-                                            <div className="list">
-                                                <input type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed }) } />
-                                                <Title className={`${value.completed && "strike"}`} onClick={() => store({ id: value._id, name: value.name, completed: !value.completed }) }>{value.name}</Title>
-                                            </div>
-                                            <div className="action">
-                                                <img onClick={() => openModal(value) } src="./icons/pen-solid.svg" style={{ marginRight: "16px" }} alt="pen" />
-                                                <img onClick={() => remove(value._id) } src="./icons/trash-solid.svg" alt="trash" />
-                                            </div>
-                                        </CheckList>
-                                    )) : 
-                                    <FlexCenter style={{ height: "100%", padding: "24px 0" }}>
-                                        <Title>No data been found</Title>
-                                    </FlexCenter>  
-                                )
-                            }
+                        {taskLoading ? <div style={{ padding: "24px" }}>
+                            <Skeleton height="24px" width="100%" />
+                            <Skeleton height="24px" width="90%" />
+                            <Skeleton height="24px" width="80%" />
+                        </div> : (
+                            handleFilter.length > 0 ?
+                                _.orderBy(handleFilter, ["createdAt"], ["desc"]).map((value, key) => (
+                                    <CheckList key={key} style={{
+                                        borderBottom: key === handleFilter.length - 1 ? "unset" : "2px solid #E8E8E8"
+                                    }}>
+                                        <div className="list">
+                                            <input type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed })} />
+                                            <Title className={`${value.completed && "strike"}`} onClick={() => store({ id: value._id, name: value.name, completed: !value.completed })}>
+                                                <Highlighter
+                                                    searchWords={[search]}
+                                                    autoEscape={true}
+                                                    textToHighlight={value.name}
+                                                />
+                                            </Title>
+                                        </div>
+                                        <div className="action">
+                                            <img onClick={() => openModal(value)} src="./icons/pen-solid.svg" style={{ marginRight: "16px" }} alt="pen" />
+                                            <img onClick={() => remove(value._id)} src="./icons/trash-solid.svg" alt="trash" />
+                                        </div>
+                                    </CheckList>
+                                )) :
+                                <FlexCenter className="h-100">
+                                    <Title>No data been found</Title>
+                                </FlexCenter>
+                        )
+                        }
                     </Card>
                 </TaskBottom>           
             </WithTask>
 
         }
         <Modal show={show} onClose={closeModal}>
-            <Title>{getValues("id") === 0 ? "+ New" : <><img src="./icons/pen-solid.svg" alt="pen" /> Edit</> } Task</Title>
+            <Title style={{ paddingBottom: "12px" }}>{getValues("id") === 0 ? "+ New" : <><img src="./icons/pen-solid.svg" alt="pen" /> Edit</> } Task</Title>
             <form id="taskForm" onSubmit={handleSubmit(store)}>
                 <Controller
                     control={control}
