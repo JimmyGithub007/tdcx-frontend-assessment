@@ -9,6 +9,7 @@ import Header from "../layouts/header";
 import Modal from '../widgets/modal';
 import axios from 'axios';
 import PieChart from '../widgets/pie';
+import Loader from '../widgets/loader';
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -19,12 +20,7 @@ const Dashboard = () => {
     const [ search, setSearch ] = useState("");
     const [ show, setShow ] = useState(false);
     const [ user, setUser ] = useState(null);
-    const [ task, setTask ] = useState({
-        tasksCompleted: 0,
-        totalTasks: 0, 
-        latestTasks: [],
-        listing: []
-    });
+    const [ task, setTask ] = useState(null);
 
     const { control, handleSubmit, formState: { errors }, reset, getValues } = useForm({
         defaultValues: {
@@ -105,8 +101,8 @@ const Dashboard = () => {
     }
 
     const handleFilter = useMemo(() => {
-        return task.listing.filter(t => t.name.toLowerCase().includes(String(search).toLowerCase()));
-    }, [task.listing, search]);
+        return task?.listing.filter(t => t.name.toLowerCase().includes(String(search).toLowerCase()));
+    }, [task?.listing, search]);
 
     useEffect(() => {
         if(localStorage.getItem("userData")) {
@@ -140,15 +136,21 @@ const Dashboard = () => {
                     setLatestLoading(false);
                 }, 1000);  
     
-                setTask({
-                    ...resp[0].data,
-                    listing: resp[1].data.tasks
-                });
+                setTimeout(() => {
+                    setTask({
+                        ...resp[0].data,
+                        listing: resp[1].data.tasks
+                    });
+                }, 100); 
             }).catch(error => {
                 console.log(error)
             })
         }
     }, [user])
+
+    if (!task) {
+        return <Loader />
+    }
 
     return (<>
         <Header navigate={navigate} user={user} />
@@ -204,11 +206,11 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <Card second={2}>
-                        {taskLoading ? <div style={{ padding: "24px" }}>
+                        {   taskLoading ? <div style={{ padding: "24px" }}>
                             <Skeleton height="24px" width="100%" />
                             <Skeleton height="24px" width="90%" />
                             <Skeleton height="24px" width="80%" />
-                        </div> : (
+                            </div> : (
                             handleFilter.length > 0 ?
                                 _.orderBy(handleFilter, ["createdAt"], ["desc"]).map((value, key) => (
                                     <CheckList key={key} style={{
@@ -233,7 +235,7 @@ const Dashboard = () => {
                                 <FlexCenter className="h-100">
                                     <Title>No data been found</Title>
                                 </FlexCenter>
-                        )
+                            )
                         }
                     </Card>
                 </TaskBottom>           
