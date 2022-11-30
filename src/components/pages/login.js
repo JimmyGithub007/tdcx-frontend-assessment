@@ -1,8 +1,10 @@
 import axios from "axios";
-import { Button, Card, ErrorMessage, Input } from "../../styles";
+import { Button, Card, ErrorMessage, FlexCenter, Input, Title } from "../../styles";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
+
+const apiURL = process.env.REACT_APP_API_URL;
 
 const Login = () => {
     const navigate = useNavigate();
@@ -15,12 +17,12 @@ const Login = () => {
     });
 
     const onSubmit = data => {
-        axios.post(`https://dev-dl.tdcx.com:3092/login`, {
+        axios.post(`${apiURL}/login`, {
           "name": data.name,
           "apiKey": data.id
         }).then(resp => {
           localStorage.setItem('userData', JSON.stringify({
-            image: `https://dev-dl.tdcx.com:3092/${resp.data.image}`,
+            image: `${apiURL}/${resp.data.image}`,
             token: resp.data.token
           }))
           navigate('/');
@@ -36,21 +38,11 @@ const Login = () => {
     }, [navigate])
 
     return (<form onSubmit={handleSubmit(onSubmit)}>
-        <div style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            justifyContent: "center",
-            height: "100vh"
-        }}>
-            <Card style={{
+        <FlexCenter>
+            <Card gap="12px" style={{
                 padding: "24px 24px 33px 24px"
             }}>
-                <span style={{
-                    color: "#537178",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    paddingBottom: "12px",
-                }}>Login</span>
+                <Title style={{ paddingBottom: "12px" }}>Login</Title>
                 <Controller
                     control={control}
                     name="id"
@@ -67,7 +59,7 @@ const Login = () => {
                 { errors.name && <ErrorMessage>Name is required</ErrorMessage> }
                 <Button className="full" type="submit">Login</Button>
             </Card>
-        </div>
+        </FlexCenter>
     </form>)
 }
 

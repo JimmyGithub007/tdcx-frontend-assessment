@@ -1,5 +1,12 @@
 import styled, { keyframes } from 'styled-components';
 
+const colors = {
+    "blue" : "#5285EC",
+    "white" : "#FFF",
+    "lightgray" : "#8F9EA2",
+    "gray" : "#537178"
+}
+
 const skeletonKeyframes = keyframes`
     0% {
         background-position: -200px 0;
@@ -16,19 +23,19 @@ export const Avatar = styled.img`
 `
 
 export const Card = styled.div`
-    background-color: #FFF;
+    background-color: ${colors.white};
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: ${ props => props.gap || "unset" }
 ` 
 
 export const Button = styled.button`
-    background-color: #5285EC;
+    background-color: ${colors.blue};
     border-radius: 8px;
     border: unset;
-    color: #FFF;
+    color: ${colors.white};
     font-size: 14px;
     height: 40px;
     padding: 11px 22px;
@@ -55,7 +62,7 @@ export const Input = styled.input`
 
 export const Navbar = styled.div`
     align-items: center;
-    background-color: #FFF;
+    background-color: ${colors.white};
     box-shadow: 0px 3px 6px #00000029;
     display: flex;
     height: 72px;
@@ -107,13 +114,13 @@ export const ModalContainer = styled.div`
 `
 
 export const Title = styled.span`
-    color: #537178;
+    color: ${colors.gray};
     font-size: 20px;
     font-weight: 500;
 `
 
 export const List = styled.ul`
-    color: #8F9EA2;
+    color: ${colors.lightgray};
     font-size: 14px;
     list-style-position: inside;
     padding-left: 0;
@@ -133,9 +140,9 @@ export const CheckList = styled.div`
     margin: 0 24px;
     padding: 24px 0;
     ${Title} {
-        color: #5285EC;
+        color: ${colors.blue};
         &.strike {
-            color: #537178;
+            color: ${colors.gray};
             text-decoration: line-through;
         }
     }
@@ -171,6 +178,10 @@ export const FlexCenter = styled.div`
     justify-content: center;
     flex-direction: column;
     height: 100vh;
+    &.h-100 {
+        height: 100%;
+        padding: 24px 0;
+    }
 `
 
 export const NoTask = styled.div`
@@ -214,6 +225,17 @@ export const TaskTop = styled.div`
         padding: 24px 24px 28px 24px;
         height: 110px;
         width: 256px;
+        .count {
+            font-weight: 500;
+            span:nth-child(1) {
+                color: ${colors.blue};
+                font-size: 64px;
+            }
+            span:nth-child(2) {
+                color: ${colors.lightgray};
+                font-size: 20px;
+            }
+        }
     }
     @media (max-width: 960px) {
         align-items: center;
