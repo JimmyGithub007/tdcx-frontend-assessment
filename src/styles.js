@@ -170,6 +170,7 @@ export const CheckList = styled.div`
 
 export const Body = styled.div`
     background-color: #F4F4F6;
+    overflow-x: hidden;
 `
 
 export const FlexCenter = styled.div`
