@@ -98,14 +98,15 @@ export const ModalContainer = styled.div`
     visibility: ${ props => props.show ? "visible" : "hidden" };
     display: flex;
     opacity: ${ props => props.show ? 1 : 0 };
-    height: calc(100vh + 72px);
+    height: 100%;
     justify-content: center;
     left: 0;
-    position: absolute;
+    position: fixed;
     top: 0;
     transition: opacity 500ms;
     width: 100%;
     @media (max-width: 576px) {
+        height: calc(100vh + 72px);
         align-items: flex-start;
         ${Card} {
             margin-top: 84px;
@@ -199,6 +200,7 @@ export const NoTask = styled.div`
     @media (max-width: 576px) {
         align-items: flex-start;
         margin-top: 12px;
+        height: calc(100vh - 84px);
         ${Card} {
             border-radius: 0;
             width: 100%;
