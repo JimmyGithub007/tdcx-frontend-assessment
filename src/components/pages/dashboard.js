@@ -166,14 +166,14 @@ const Dashboard = () => {
             </NoTask> :
             <WithTask>
                 <TaskTop>
-                    <Card>
+                    <Card second={0.5}>
                         <Title>Tasks Completed</Title>
                         <div className="count">
                             <span>{task.tasksCompleted}</span>
                             <span> / {task.totalTasks}</span>
                         </div>
                     </Card>
-                    <Card>
+                    <Card second={1}>
                         <Title>Latest Created Tasks</Title>
                         <List>
                             {
@@ -188,7 +188,7 @@ const Dashboard = () => {
                             }
                         </List>
                     </Card>
-                    <Card>
+                    <Card second={1.5}>
                         <PieChart incompleted={task.totalTasks - task.tasksCompleted} completed={task.tasksCompleted} />
                     </Card>
                 </TaskTop>     
@@ -203,7 +203,7 @@ const Dashboard = () => {
                             <Button onClick={() => openModal(null) }>+ New Task</Button>
                         </div>
                     </div>
-                    <Card>
+                    <Card second={2}>
                         {taskLoading ? <div style={{ padding: "24px" }}>
                             <Skeleton height="24px" width="100%" />
                             <Skeleton height="24px" width="90%" />
