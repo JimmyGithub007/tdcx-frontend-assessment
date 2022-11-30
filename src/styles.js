@@ -16,6 +16,17 @@ const skeletonKeyframes = keyframes`
     }
 `;
 
+const fadeIn = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+`;
+
 export const Avatar = styled.div`
     width: 48px;
     height: 48px;
@@ -30,6 +41,7 @@ export const Avatar = styled.div`
 `
 
 export const Card = styled.div`
+    animation: ${fadeIn} ${props => props.second || 1}s;
     background-color: ${colors.white};
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 12px;
