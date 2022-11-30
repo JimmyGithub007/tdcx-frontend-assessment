@@ -215,8 +215,8 @@ const Dashboard = () => {
                                         borderBottom: key === handleFilter.length - 1 ? "unset" : "2px solid #E8E8E8"
                                     }}>
                                         <div className="list">
-                                            <input type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed })} />
-                                            <Title className={`${value.completed && "strike"}`} onClick={() => store({ id: value._id, name: value.name, completed: !value.completed })}>
+                                            <input id={value._id} type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed })} />
+                                            <Title htmlFor={value._id} className={`${value.completed && "strike"}`}>
                                                 <Highlighter
                                                     searchWords={[search]}
                                                     autoEscape={true}

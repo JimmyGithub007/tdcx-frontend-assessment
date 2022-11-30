@@ -114,7 +114,7 @@ export const ModalContainer = styled.div`
     }
 `
 
-export const Title = styled.span`
+export const Title = styled.label`
     color: ${colors.gray};
     font-size: 20px;
     font-weight: 500;
@@ -143,21 +143,49 @@ export const CheckList = styled.div`
     ${Title} {
         color: ${colors.blue};
         &.strike {
-            color: ${colors.gray};
-            text-decoration: line-through;
+            span {
+                color: ${colors.gray};
+                text-decoration: line-through;
+            }
+        }
+        span {
+           line-break: anywhere; 
         }
     }
     .list {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 12px;
         width: 100%;
-        input[type=checkbox], span {
+        label {
             cursor: pointer;
         }
         input[type=checkbox] {
-            margin-top: 8px;
-            scale: 1.4612;
+            position: relative;
+            border: 2.5px solid #95A4AB;
+            border-radius: 4px;
+            background: none;
+            cursor: pointer;
+            line-height: 0;
+            outline: 0;
+            padding: 0 !important;
+            vertical-align: text-top;
+            height: 19px;
+            min-width: 19px;
+            -webkit-appearance: none;
+        }
+        input[type=checkbox]:checked:before {
+            content: '';
+            position: absolute;
+            right: 30%;
+            top: 20%;
+            width: 5px;
+            height: 15px;
+            border: solid #707070;
+            border-width: 0 3.5px 3.5px 0;
+            margin: -1px -1px 0 -1px;
+            transform: rotate(45deg) translate(-50%, -50%);
+            z-index: 2;
         }
     }
     .action{ 
