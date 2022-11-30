@@ -98,7 +98,7 @@ export const ModalContainer = styled.div`
     visibility: ${ props => props.show ? "visible" : "hidden" };
     display: flex;
     opacity: ${ props => props.show ? 1 : 0 };
-    height: 100%;
+    height: calc(100vh + 72px);
     justify-content: center;
     left: 0;
     position: absolute;
