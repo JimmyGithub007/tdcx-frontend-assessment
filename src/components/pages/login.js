@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button, Card, Input } from "../../styles";
+import { Button, Card, ErrorMessage, Input } from "../../styles";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
@@ -15,12 +15,10 @@ const Login = () => {
     });
 
     const onSubmit = data => {
-        console.log(data);
         axios.post(`https://dev-dl.tdcx.com:3092/login`, {
           "name": data.name,
           "apiKey": data.id
         }).then(resp => {
-          console.log(resp.data);
           localStorage.setItem('userData', JSON.stringify({
             image: `https://dev-dl.tdcx.com:3092/${resp.data.image}`,
             token: resp.data.token
@@ -59,14 +57,14 @@ const Login = () => {
                     render={({ field }) => <Input {...field} placeholder="Id" type="text" /> }
                     rules={{ required: true }}
                 />
-                { errors.id && <span>Id is required</span> }
+                { errors.id && <ErrorMessage>Id is required</ErrorMessage> }
                 <Controller
                     control={control}
                     name="name"
                     render={({ field }) => <Input {...field} placeholder="Name" type="text" /> }
                     rules={{ required: true }}
                 />
-                { errors.name && <span>Name is required</span> }
+                { errors.name && <ErrorMessage>Name is required</ErrorMessage> }
                 <Button className="full" type="submit">Login</Button>
             </Card>
         </div>
