@@ -38,9 +38,7 @@ const Dashboard = () => {
 
     const openModal = (value) => {
         document.body.style.overflowY = 'hidden';
-        if(window.innerWidth < 576) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+
         setShow(true);
         reset({
             id: value ? value._id : 0,
