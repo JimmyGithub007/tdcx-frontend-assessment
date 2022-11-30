@@ -9,7 +9,9 @@ const Header = ({ user, navigate }) => {
     return (<Navbar>
         <div className="content">
             <div className="profile">
-                <Avatar src={user?.image} alt="profile" />
+                <Avatar>
+                    <img src={user?.image} alt="profile" />
+                </Avatar>
                 <span>{user?.token?.name}</span>
             </div>
             <span className="link" onClick={logout}>Logout</span>

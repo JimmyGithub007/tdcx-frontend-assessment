@@ -16,10 +16,17 @@ const skeletonKeyframes = keyframes`
     }
 `;
 
-export const Avatar = styled.img`
-    border-radius: 100%;
-    height: 48px;
+export const Avatar = styled.div`
     width: 48px;
+    height: 48px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    img {
+        height: inherit;
+    }
 `
 
 export const Card = styled.div`
