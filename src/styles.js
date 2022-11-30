@@ -55,7 +55,7 @@ export const Input = styled.input`
 
 export const Navbar = styled.div`
     align-items: center;
-    background-color: #FFFFFF;
+    background-color: #FFF;
     box-shadow: 0px 3px 6px #00000029;
     display: flex;
     height: 72px;
@@ -65,6 +65,11 @@ export const Navbar = styled.div`
         display: flex;
         align-items: center;
         justify-content: space-between;
+        .profile {
+            align-items: center;
+            display: flex;
+            gap: 16px;
+        }
     }
     @media (max-width: 960px) {
         padding: 0 24px;
@@ -72,6 +77,7 @@ export const Navbar = styled.div`
     span {
         color: #6D8187;
         font-size: 16px;
+        font-weight: 500;
     }
     .link:hover {
         cursor: pointer;
@@ -281,6 +287,13 @@ export const TaskBottom = styled.div`
             }
         }
     }
+`
+
+export const ErrorMessage = styled.span`
+    color: #ef4444;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 0;
 `
 
 export const Skeleton = styled.div`

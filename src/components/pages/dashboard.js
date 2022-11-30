@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from "react";
-import { Button, Card, CheckList, Input, List, NoTask, SearchInput, Skeleton, TaskBottom, TaskTop, Title, WithTask } from "../../styles";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Button, Card, CheckList, ErrorMessage, FlexCenter, Input, List, NoTask, SearchInput, Skeleton, TaskBottom, TaskTop, Title, WithTask } from "../../styles";
 import { Controller, useForm } from 'react-hook-form';
 import _ from 'lodash';
 
@@ -25,13 +25,15 @@ const Dashboard = () => {
         listing: []
     });
 
-    const { control, handleSubmit, reset, getValues } = useForm({
+    const { control, handleSubmit, formState: { errors }, reset, getValues } = useForm({
         defaultValues: {
             id: 0,
             name: "",
             completed: false
         }
     });
+
+    const axiosRef = useRef(null);
 
     const openModal = (value) => {
         document.body.style.overflowY = 'hidden';
@@ -52,12 +54,8 @@ const Dashboard = () => {
     }
 
     const remove = id => {
-        const axiosInstance = axios.create({
-            headers: { Authorization: `Bearer ${user.token.token}` }
-        });
-
         const taskListing = task.listing.filter(t => t._id !== id);
-        axiosInstance.delete(`${apiURL}/tasks/${id}`).then(() => {
+        axiosRef.current.delete(`${apiURL}/tasks/${id}`).then(() => {
             setTask({
                 totalTasks: taskListing.length,
                 tasksCompleted: taskListing.filter(t => t.completed === true).length,
@@ -70,15 +68,11 @@ const Dashboard = () => {
     }
 
     const store = async value => {
-        const axiosInstance = axios.create({
-            headers: { Authorization: `Bearer ${user.token.token}` }
-        });
-
         let resp = null;
         try {
             if(value.id !== 0) {//update
                 let data = { name: value.name, completed: value.completed };
-                resp = await axiosInstance.put(`${apiURL}/tasks/${value.id}`, data);
+                resp = await axiosRef.current.put(`${apiURL}/tasks/${value.id}`, data);
 
                 let tasksCompleted = task.tasksCompleted;
                 if(task.listing.find(t => t._id === value.id).completed !== value.completed) {
@@ -93,7 +87,7 @@ const Dashboard = () => {
                     listing: task.listing.map(t => t._id === value.id ? resp.data.task : t )
                 });
             } else {//create
-                resp = await axiosInstance.post(`${apiURL}/tasks`, {
+                resp = await axiosRef.current.post(`${apiURL}/tasks`, {
                     name: value.name
                 });
 
@@ -111,9 +105,19 @@ const Dashboard = () => {
         }
     }
 
+    const handleFilter = useMemo(() => {
+        return task.listing.filter(t => t.name.toLowerCase().includes(String(search).toLowerCase()));
+    }, [task.listing, search]);
+
     useEffect(() => {
         if(localStorage.getItem("userData")) {
-            setUser(JSON.parse(localStorage.getItem("userData")))
+            const fromSession = JSON.parse(localStorage.getItem("userData"));
+
+            axiosRef.current = axios.create({
+                headers: { Authorization: `Bearer ${fromSession.token.token}` }
+            });
+
+            setUser(fromSession);
         } else {
             navigate('/login')
         }
@@ -129,13 +133,9 @@ const Dashboard = () => {
     useEffect(() => {
         if(user) {
             setLatestLoading(true);
-            const axiosInstance = axios.create({
-                headers: { Authorization: `Bearer ${user.token.token}` }
-            });
-    
             axios.all([
-                axiosInstance.get(`${apiURL}/dashboard`),
-                axiosInstance.get(`${apiURL}/tasks`),
+                axiosRef.current.get(`${apiURL}/dashboard`),
+                axiosRef.current.get(`${apiURL}/tasks`),
             ]).then(resp => {
                 setTimeout(() => {
                     setLatestLoading(false);
@@ -210,21 +210,26 @@ const Dashboard = () => {
                                     <Skeleton height="24px" width="100%" />
                                     <Skeleton height="24px" width="90%" />
                                     <Skeleton height="24px" width="80%" />
-                                </div> :
-                                _.orderBy(task.listing, ["createdAt"], ["desc"]).filter(t => t.name.toLowerCase().includes(String(search).toLowerCase())).map((value, key) => (
-                                    <CheckList key={key} style={{ 
-                                        borderBottom: key === task.listing.length - 1 ? "unset" : "2px solid #E8E8E8"
-                                    }}>
-                                        <div className="list">
-                                            <input type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed }) } />
-                                            <Title className={`${value.completed && "strike"}`} onClick={() => store({ id: value._id, name: value.name, completed: !value.completed }) }>{value.name}</Title>
-                                        </div>
-                                        <div className="action">
-                                            <img onClick={() => openModal(value) } src="./icons/pen-solid.svg" style={{ marginRight: "16px" }} alt="pen" />
-                                            <img onClick={() => remove(value._id) } src="./icons/trash-solid.svg" alt="trash" />
-                                        </div>
-                                    </CheckList>
-                                ))
+                                </div> : (
+                                    handleFilter.length > 0 ?
+                                    _.orderBy(handleFilter, ["createdAt"], ["desc"]).map((value, key) => (
+                                        <CheckList key={key} style={{ 
+                                            borderBottom: key === task.listing.length - 1 ? "unset" : "2px solid #E8E8E8"
+                                        }}>
+                                            <div className="list">
+                                                <input type='checkbox' checked={value.completed} onChange={() => store({ id: value._id, name: value.name, completed: !value.completed }) } />
+                                                <Title className={`${value.completed && "strike"}`} onClick={() => store({ id: value._id, name: value.name, completed: !value.completed }) }>{value.name}</Title>
+                                            </div>
+                                            <div className="action">
+                                                <img onClick={() => openModal(value) } src="./icons/pen-solid.svg" style={{ marginRight: "16px" }} alt="pen" />
+                                                <img onClick={() => remove(value._id) } src="./icons/trash-solid.svg" alt="trash" />
+                                            </div>
+                                        </CheckList>
+                                    )) : 
+                                    <FlexCenter style={{ height: "100%", padding: "24px 0" }}>
+                                        <Title>No data been found</Title>
+                                    </FlexCenter>  
+                                )
                             }
                     </Card>
                 </TaskBottom>           
@@ -239,8 +244,9 @@ const Dashboard = () => {
                     name="name"
                     render={({ field }) => <Input {...field} placeholder="Task Name" type="text" /> }
                     rules={{ required: true }}
-                />                             
+                />                         
             </form>
+            { errors.name && <ErrorMessage>Name is required</ErrorMessage> }    
             <Button className="full" type="submit" form="taskForm">{getValues("id") === 0 ? "+ New" : "Update" } Task</Button>
         </Modal>
     </>)

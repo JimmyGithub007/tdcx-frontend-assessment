@@ -8,11 +8,7 @@ const Header = ({ user, navigate }) => {
 
     return (<Navbar>
         <div className="content">
-            <div style={{ 
-                display: "flex",
-                alignItems: "center",
-                gap: "16px",
-            }}>
+            <div className="profile">
                 <Avatar src={user?.image} alt="profile" />
                 <span>{user?.token?.name}</span>
             </div>
