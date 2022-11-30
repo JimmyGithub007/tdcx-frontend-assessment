@@ -7,6 +7,27 @@ const colors = {
     "gray" : "#537178"
 }
 
+//animations - start
+const grow = keyframes`
+    from {
+        opacity: 0;
+        transform: scale(0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+`;
+
+const move = keyframes`
+    from {
+        transform: translateX(0px)
+    }
+    to {
+        transform: translateX(45px)
+    }
+`;
+
 const skeletonKeyframes = keyframes`
     0% {
         background-position: -200px 0;
@@ -25,7 +46,7 @@ const fadeIn = keyframes`
         opacity: 1;
         transform: translateY(0px);
     }
-`;
+`;//end
 
 export const Avatar = styled.div`
     width: 48px;
@@ -384,4 +405,36 @@ export const Skeleton = styled.div`
     background-repeat: no-repeat;
     border-radius: 4px;
     margin-bottom: 8px;
+`
+
+export const LoadContainer = styled(FlexCenter)`
+    min-height: inherit;
+    .container {
+        height: 15px;
+        width: 105px;
+        display: flex;
+        position: relative;
+        .circle {
+            background: ${colors.blue};
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: $primary-color;
+            animation: ${move} 500ms linear 0ms infinite;
+            margin-right: 30px;
+            &:first-child {
+                position: absolute;
+                top: 0;
+                left: 0;
+                animation: ${grow} 500ms linear 0ms infinite;
+            }
+            &:last-child {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin-right: 0;
+                animation: ${grow} 500ms linear 0s infinite reverse;
+            }
+        }
+    }
 `
